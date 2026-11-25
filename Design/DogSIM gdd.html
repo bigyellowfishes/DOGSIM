@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawsome Day Centre · game design document</title><style>
+:root{--mint:#c9eedd;--mint-deep:#7fcfae;--coral:#f6a48f;--lavender:#d9cdf5;--lav-deep:#a892e0;--pink:#f9cfe0;--butter:#fcecae;--ink:#3d3144;--soft:#6b5f73;--paper:#fffaf3;--line:#eadfd2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.55 "Nunito","Quicksand","Trebuchet MS",system-ui,sans-serif}
+.wrap{max-width:920px;margin:0 auto;padding:28px 20px 60px}
+.stamp{font-size:13px;color:var(--soft)}
+header{margin:18px 0 26px;border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;position:relative}
+header .door{padding:150px 26px 26px;min-height:250px;display:flex;align-items:flex-end;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:14px}
+header .in{background:var(--mint);border-top:16px solid var(--coral)}
+header .out{background:var(--lavender);border-top:16px solid var(--mint-deep);justify-content:flex-end}
+header .title{position:absolute;left:0;right:0;top:46px;text-align:center;padding:0 20px}
+h1{margin:0 0 8px;font-size:clamp(30px,6vw,46px);line-height:1.1}
+.promise{display:inline-block;max-width:620px;background:var(--paper);border-radius:18px;padding:14px 20px;font-size:19px;font-weight:700}
+h2{font-size:23px;margin:44px 0 12px;padding:10px 16px;border-radius:16px;background:var(--butter)}
+h2:nth-of-type(3n+1){background:var(--mint)} h2:nth-of-type(3n+2){background:var(--pink)}
+h3{font-size:18px;margin:24px 0 8px}
+p{margin:0 0 12px} hr{display:none}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:0 0 16px;background:#fff;border-radius:14px;overflow:hidden}
+td,th{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--soft);background:#fbf3e8}
+td:first-child{font-weight:700}
+blockquote{margin:0 0 14px;padding:12px 16px;border-left:6px solid var(--lav-deep);background:#fff;border-radius:0 14px 14px 0}
+blockquote p{margin:0}
+.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.03em;border-radius:999px;padding:1px 8px;margin:1px 2px;vertical-align:1px}
+.ok{background:var(--mint)} .draft{background:var(--butter)} .open{background:var(--pink)} .test{background:var(--lavender)}
+.legend{font-size:14px;color:var(--soft);background:#fff;border:2px dashed var(--lav-deep);border-radius:16px;padding:12px 16px}
+@media(max-width:680px){header .door{min-height:300px;padding-top:210px} td,th{padding:8px}}
+</style></head><body><div class="wrap">
+<div class="stamp">rendered from design/gdd.md · v2 · 2026-11-24 · full draft, not yet signed off</div>
+<header><div class="door in">Welcome</div><div class="door out">Goodbye</div>
+<div class="title"><h1>Pawsome Day Centre</h1><div class="promise">A cosy dog-adoption sim where you choose every pup&#x27;s forever home, but a wrong match comes back to you.</div></div></header>
+<p class="legend"><span class="tag ok">picked</span> chosen by the creator from options ·
+<span class="tag draft">draft</span> written by the agent, waiting for the creator's yes ·
+<span class="tag open">open</span> waiting on something ·
+<span class="tag test">to test</span> a claim parked for a playtest.
+This page is for looking at and sharing. <b>design/gdd.md</b> is the document that gets submitted.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public experience title</td>
+<td>Pawsome Day Centre · IP &amp; <a href="https://decentraland.org/content/">Content Policy</a> self-check: <span class="tag open">to be decided: the creator still has to check the names &quot;Pawsome&quot; and &quot;doggidex&quot;</span></td>
+</tr>
+<tr>
+<td>Deployment target</td>
+<td><span class="tag open">to be decided: not given yet</span></td>
+</tr>
+<tr>
+<td>Studio / team name</td>
+<td><span class="tag open">to be decided: not given yet</span></td>
+</tr>
+<tr>
+<td>Date</td>
+<td>2026-11-24</td>
+</tr>
+<tr>
+<td>Contact (Discord + email)</td>
+<td><span class="tag open">to be decided: not given yet</span></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>0. TL;DR</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Player promise</strong></td>
+<td>A cosy dog-adoption sim where you choose every pup's forever home, but a wrong match comes back to you.</td>
+</tr>
+<tr>
+<td><strong>Primary player</strong></td>
+<td>For players in Brazil, mainly women (men can play too), who already enjoy cosy pet and care games on their phone, arriving alone from Decentraland's Discover page, looking for a five-minute visit with a dog that knows them. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td><strong>Current status</strong></td>
+<td>Playable core loop in SDK7, built in Creator Hub: one corgi, eight pup actions, arrivals and adoptions working (a pup still leaves by itself when its hearts are full; needs, matching, the personal dog, the doggidex and the shared Park are not built yet). The Main Room, the Bathroom and the Park are built; Room 3 and Room 4 are empty. A dev menu can spawn, despawn and adopt a pup for testing. No playable link given yet.</td>
+</tr>
+<tr>
+<td><strong>Requested round</strong></td>
+<td>v0 (vertical slice) first, then v1 (4-week scope).</td>
+</tr>
+<tr>
+<td><strong>Live at end of the round</strong></td>
+<td>A player can run their own day centre at any hour: read each pup's needs, choose its home, keep a dog with a daily wish, fill the doggidex, and meet other carers' dogs in the Park for play-dates, live in our World. <span class="tag draft">draft</span></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>1. Player Promise</h2>
+<p><strong>One-line promise.</strong></p>
+<p>A cosy dog-adoption sim where you choose every pup's forever home, but a wrong match comes back to you. <span class="tag ok">picked</span></p>
+<hr />
+<h2>2. First Minutes &amp; How to Play</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Player experience</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0–5 seconds after control</strong></td>
+<td>You spawn in the Main Room, facing the arrivals kennel. The door slides open and a muddy, hungry pup runs in and stops in front of you, with a food bubble over its head. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td><strong>5–10 seconds</strong></td>
+<td>You tap the pup. Its menu opens above its head and Eat is glowing. The goal is clear: give this pup what it needs. <span class="tag ok">picked</span> <span class="tag test">to test H1-01</span></td>
+</tr>
+<tr>
+<td><strong>10–60 seconds</strong></td>
+<td>The pup eats from the bowl next to you and the first heart pops. A bath bubble appears; Follow and the Bathroom exit glow. You lead the pup to the splash pool for heart two. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td><strong>1–3 minutes</strong></td>
+<td>A cuddle fills the last hearts. Three owner profiles appear by the adoption kennel. You pick one, the pup trots out under the bunting, and Adopted shows 1. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td><strong>3–10 minutes</strong></td>
+<td>A second pup arrives with different needs. Minutes after each match you learn how it went: settled in, or back at the door with less confidence. Your own card now sits among the owners: pick yourself and the pup stays. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td><strong>Natural stopping point</strong></td>
+<td>Every match has had its answer. Your own dog's bed shows tomorrow's wish. <span class="tag ok">picked</span></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Player-facing How to Play.</strong></p>
+<ul>
+<li>Tap a pup and meet its needs <span class="tag draft">draft</span></li>
+<li>Full hearts mean ready: choose its home <span class="tag draft">draft</span></li>
+<li>Play-dates in the Park help both dogs <span class="tag draft">draft</span></li>
+</ul>
+<hr />
+<h2>3. Core Loop</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step (verb)</th>
+<th>What the player does (Player input → what they see or hear → what changes)</th>
+<th>Why do it again?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Meet <span class="tag ok">picked</span></td>
+<td>The centre starts with one pup at a time; upgrades let it hold more, up to 5 at once (the creator's current thinking, not final). Upgrades come from the centre's star rating <span class="tag ok">picked</span>. The arrivals kennel door slides open and a pup runs in. You click the pup → an action menu opens above its head and its hearts bar appears → the pup is selected.</td>
+<td>Every new pup is a new set of needs to read. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Care <span class="tag ok">picked</span></td>
+<td>Each pup arrives with a few visible needs that come from its traits: one is muddy, one is hungry, one is shy <span class="tag ok">picked</span>. You read the pup and pick the action it needs from its menu (such as Wash, Eat or Play), in any order → the pup does it, with hearts and speech bubbles → each need you meet adds a heart, and the pup gains confidence. Confidence is the process a pup goes through to get ready to be adopted. The hearts bar (5 hearts, called happiness in the build) shows it <span class="tag draft">draft</span>.</td>
+<td>Each need you meet adds a heart you can see and brings the pup closer to a home. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Lead <span class="tag ok">picked</span></td>
+<td>You press Follow → the pup trots after you through every room and up to the park → you press Unfollow to stop. A need can send you to another room: the bath for a muddy pup, the park for a restless one <span class="tag ok">picked</span>.</td>
+<td>What the pup needs is in another room. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Match <span class="tag ok">picked</span></td>
+<td>A pup has the confidence to be adopted → you make the match from profiles of potential owners, and a pup can go to any home → the pup leaves through the adoption kennel and the Adopted counter goes up. If the home is not right, the pup may come back to you with less confidence, and you go through the process again.</td>
+<td>A good match makes room for the next pup; a pup that comes back needs you again. <span class="tag ok">picked</span></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>One complete loop takes</strong></td>
+<td>A loop ends when you match a ready pup with one of the potential owners and it leaves through the adoption kennel. A match that is not right can reopen the loop: the pup comes back. Target: a player can complete one loop in 5 minutes. That is longer than 90 seconds, so the earlier payoff is every heart; the first lands at about 15 seconds. <span class="tag open">to be decided: time it once needs and matching are playable</span></td>
+</tr>
+<tr>
+<td><strong>Decision, challenge, or expression</strong></td>
+<td>Which home each pup goes to. Pups have traits and potential owners have profiles. Any pup can go to any home, so the choice is yours, and a match that is not right may come back. You can also keep one dog as your own pet: it always stays with you, and if the right owner comes up you can choose to let it be adopted. You keep a pup by picking your own card at the Match step <span class="tag ok">picked</span>.</td>
+</tr>
+<tr>
+<td><strong>Shortest satisfying visit / typical session</strong></td>
+<td>5 minutes, one full loop / open-ended: a session can last as long as the player wants.</td>
+</tr>
+<tr>
+<td><strong>Why repetition 10 differs from repetition 1</strong></td>
+<td>Each pup arrives with different needs, because its traits differ, and the potential owners' profiles change too. So you have to read every pup and every match again. <span class="tag ok">picked</span> <span class="tag test">to test H2-01</span></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Pillars.</strong></p>
+<ol>
+<li>Every pup gets a happy ending, in the end: setbacks yes, losses never. A pup can come back as many times as it takes; it is never taken away and there is no game over. <span class="tag ok">picked</span></li>
+<li>Overly cosy, pastel and cute.</li>
+<li>The match is yours: any pup can go to any home, and the game never chooses for you. <span class="tag ok">picked</span></li>
+</ol>
+<hr />
+<h2>4. Why Players Come Back</h2>
+<h3>4.1 The next-day (D1) sentence</h3>
+<blockquote>
+<p>"A player who enjoyed their first session returns the next day (D1) because Hook 2, their own dog, has a new daily wish at a fixed hour, and its bed shows tomorrow's wish before they leave." <span class="tag ok">picked</span> <span class="tag test">to test H2-02</span></p>
+</blockquote>
+<h3>4.2 The progression chain</h3>
+<blockquote>
+<p><strong>Repeatable action → persistent reward → new capability, status, or social role → new decision or challenge</strong></p>
+</blockquote>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Moment</th>
+<th>What persists or has been built?</th>
+<th>What becomes possible next?</th>
+<th>How can another player tell?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>End of first session</strong></td>
+<td>Your first doggidex stamps and, if you kept a pup, your own dog with "days together" at 1. <span class="tag draft">draft</span></td>
+<td>Tomorrow's wish for your dog. <span class="tag draft">draft</span></td>
+<td>Your dog walks with you in the Park, with its collar tag. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td><strong>End of first week</strong></td>
+<td>A star rating for your centre, about 13 of 20 stamps and 7 days together, if you make three matches a day (arithmetic, assuming breeds arrive at random). <span class="tag draft">draft</span></td>
+<td>Stars have opened more kennels, so you care for several pups at once and choose which pup goes to which owner. <span class="tag ok">picked</span></td>
+<td>Your centre's stars show next to your carer's name in the Park. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td><strong>Week 3+: what takes more than two weeks?</strong></td>
+<td>Completing the doggidex. With 20 breeds arriving at random it takes about 72 successful matches, so three to four weeks at three matches a day (arithmetic).</td>
+<td>The fifth kennel, and the full book. <span class="tag draft">draft</span></td>
+<td>A doggidex ribbon on your dog's collar. <span class="tag draft">draft</span></td>
+</tr>
+</tbody>
+</table></div>
+<p>The centre has a star rating. Good matches raise it, and a pup that comes back lowers it a little. Stars unlock kennels, from one pup toward five. <span class="tag ok">picked</span> A kennel that is unlocked stays unlocked, so a lower rating is a setback and never a loss. <span class="tag draft">draft</span></p>
+<p>You arrive and your dog is waiting by its bed with today's wish: a run in the park. Three pups are in the centre now, because your stars opened two more kennels. One is the beagle that came back on Tuesday, and today you find it a quieter home, which stamps entry 13 of 20. In the Park, another carer's dog wears a collar tag that says 21 days. <span class="tag draft">draft</span></p>
+<p>Currency or tradable rewards: N/A. There is no currency; kennels unlock from the star rating.</p>
+<h3>4.3 Two return hooks</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Selected hook</th>
+<th>Exact trigger or timing</th>
+<th>What the player anticipates</th>
+<th>Reminder channel + no-reminder fallback</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1.</strong> Collection: the doggidex</td>
+<td>An entry is stamped when a match sticks. A pup that comes back is not stamped until its next home works out. <span class="tag ok">picked</span></td>
+<td>Completing a big book of twenty or more breeds. <span class="tag ok">picked</span></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>2.</strong> Your own dog: the daily wish <span class="tag ok">picked</span></td>
+<td>One new wish each day (a run in the park, a bath, a nap by the window), changing at a fixed hour <span class="tag open">open: waiting on picking the hour; the audience is in Brazil</span>. Granting it adds a day to "days together". A missed day pauses the count and never resets it.</td>
+<td>Tomorrow's wish, and a growing "days together" count on the dog's collar tag, which other players can see in the Park.</td>
+<td>Fallback with no reminder: the dog's bed shows tomorrow's wish before you leave.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The creator names a third reason to come back: to help other dogs. That is the core loop itself.</p>
+<p>How you get your own dog: at the Match step your own card sits among the potential owners. Pick yourself and the pup stays. You can have one dog at a time, and the option appears from your second pup, about five to eight minutes into the first visit. Later your dog can appear in a match too, which is how you let it go to the right home. <span class="tag ok">picked</span></p>
+<hr />
+<h2>5. Social by Design</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>The repeatable social loop</strong></td>
+<td>Player A brings a dog to the Park and taps Player B's dog to offer a play-date → Player B taps to accept → the two dogs play and both gain hearts, and a shy pup gains confidence it cannot get alone → the friendship is saved: the dogs greet each other next time, and a daily wish can be "see my friend again", which is the reason to regroup. <span class="tag ok">picked</span> <span class="tag test">to test H2-03</span></td>
+</tr>
+<tr>
+<td><strong>The disappearance test</strong></td>
+<td>Play-dates and dog friendships stop: "see my friend again" wishes cannot be granted and shy pups lose their fastest way to gain confidence. The centre, the matches, the doggidex and the rest of your dog's wishes carry on. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td><strong>From strangers to a group</strong></td>
+<td>Everyone in the Park is a carer with a dog, so there is one role. A dog that wants to play shows a bubble, and you tap it. No voice or shared language is needed. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td><strong>Recognition &amp; continuity</strong></td>
+<td>Every player is a chibi carer they can dress, with a few choices such as hair and jumper colour <span class="tag ok">picked</span>. A name shows over each carer in the Park, next to the centre's stars <span class="tag draft">draft</span>. Dog friendships persist: friend dogs greet each other the next time they meet, and a daily wish can ask to see a friend again.</td>
+</tr>
+<tr>
+<td><strong>Quiet hours &amp; player counts</strong></td>
+<td>Players meet in the Park: every player who goes there can see all the other players there. When few people are online, a solo player can play everything, and a resident Park dog offers play-dates so no pup ever waits for another player. Social play becomes viable at 2 players; the ideal group is 4 to 6; the v1 tested maximum is 10 players. The daily wish often sends dogs to the Park, so players who are online at the same time pass through the same small lawn. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td><strong>Drop-in / drop-out</strong></td>
+<td>A player who arrives late can offer a play-date at once. If a partner leaves halfway, your dog keeps the hearts it earned and the resident Park dog finishes the play-date. Saying no costs nothing. Each dog can receive one offer at a time, and no other player can touch anything inside your centre. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td><strong>Visible play (the bystander test)</strong></td>
+<td>You see carers walking their dogs across a small lawn, and two dogs chasing each other while their carers watch. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td><strong>Shareable play (the memorable moment)</strong></td>
+<td>The graduation: a pup you cared for trots out under the bunting to its new family, and its stamp lands in your doggidex. <span class="tag ok">picked</span></td>
+</tr>
+<tr>
+<td><strong>Bring-a-friend</strong></td>
+<td>When your dog's wish is "see my friend again", you want that one player in the Park. Once they arrive, the two dogs run to greet each other and the wish is granted for both of you. <span class="tag draft">draft</span></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>6. Mobile-First</h2>
+<p><strong>Every core-loop verb on touch.</strong></p>
+<p>The whole game is point and click: one click per action. On touch, each click is one tap <span class="tag draft">draft</span> <span class="tag test">to test H2-04</span>. Built and tested on desktop only so far.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Core-loop verb</th>
+<th>How it works with touch controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meet</td>
+<td>Tap the floor to walk. Tap the pup to open its menu.</td>
+</tr>
+<tr>
+<td>Care</td>
+<td>Tap the action the pup needs.</td>
+</tr>
+<tr>
+<td>Lead</td>
+<td>Tap Follow, then tap where to walk. Tap the glowing exit to change rooms, and step on the arrow tile to reach the Park.</td>
+</tr>
+<tr>
+<td>Match</td>
+<td>Tap one of the owner profile cards, or your own card to keep the pup.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>UI plan.</strong></p>
+<p>Small screen first: the camera has four on-screen buttons in a corner (rotate left, rotate right, zoom in, zoom out), so phones keep the orbit <span class="tag ok">picked</span>. The pup's actions open as large buttons within thumb reach <span class="tag draft">draft</span>. Built so far on desktop: Arrived and Adopted counters, a hearts bar while a pup is selected, and the action menu above the pup. The dev menu is for testing only.</p>
+<p><strong>Performance.</strong></p>
+<p>Target: 60fps on recommended desktop hardware and 30fps on a named phone in the mobile client, both at 10 players, our v1 tested maximum. <span class="tag open">to be decided: the test phone is not named yet</span> The biggest risk is the Park at its maximum: 10 carers and 10 dogs, all animated at once. Plan: a player's centre shows only their own pups, and the Park shows one dog per player plus the resident dog. <span class="tag draft">draft</span></p>
+<p><strong>Desktop-only dependencies.</strong></p>
+<p>Two, both in the camera: zoom on the W/S keys and orbit by dragging. Decentraland's mobile documentation (checked 2026-11-24) lists the mobile client as touch only, with no keyboard shortcuts and no drag or swipe gestures. The on-screen camera buttons replace both, so nothing in the loop needs them. The scene also runs its own cameras, hides the player's avatar and works out taps with its own ray picking; the documentation does not say whether these work on mobile. <span class="tag open">to be decided: check the current build on a phone with the Creator Hub QR code</span> Names over carers will be our own text labels, because the platform's name tag component is listed as missing on mobile.</p>
+<hr />
+<h2>7. World, Look &amp; Story</h2>
+<p><strong>Story / world.</strong></p>
+<p>You run a snug little day centre for dogs waiting for a forever home. You look after each pup until it is happy and ready, then wave it off to its new family.</p>
+<p><strong>Visual direction.</strong></p>
+<p>A little isometric diorama: four rooms in a ring around the building's centre, one visible at a time, with a park above. Simple and clean, in flat single colours with no busy textures, and a pastel palette of mint, coral, lavender, pink and butter yellow. You play a chibi day-centre carer (not a vet): hair in buns with pink bows, a butter-yellow jumper and a mint apron with a pink heart. The two kennels show where pups come and go: arrivals on the left wall (mint with a coral roof, a "Welcome" mat) and adoptions on the right wall (lavender with a mint roof, graduation bunting, a "Goodbye" mat).</p>
+<p>Our signature shot is the two doors: the whole cut-away room in one frame, with the mint Welcome kennel on the left, the lavender Goodbye kennel on the right, and one pup between them with the carer. <span class="tag ok">picked</span></p>
+<p><span class="tag open">open: waiting on a phone check for small-screen readability</span></p>
+<hr />
+<h2>8. Audience &amp; Comparables</h2>
+<p><strong>Primary player + arrival context.</strong></p>
+<p>For players in Brazil, mainly women (men can play too), who already enjoy cosy pet and care games on their phone, arriving alone from Decentraland's Discover page, looking for a five-minute visit with a dog that knows them. <span class="tag draft">draft</span></p>
+<p><strong>How the first group arrives.</strong></p>
+<p>The first players come from Decentraland's own Discover page: we list the World well and let players find it <span class="tag ok">picked</span>. We do not count on players overlapping: everything is playable alone, the resident Park dog covers play-dates, and two players are enough for social play to start. <span class="tag draft">draft</span></p>
+<p><strong>Deliberately not for.</strong></p>
+<p>Players who want competition, combat or a score to beat: nothing here can be won or lost. <span class="tag draft">draft</span></p>
+<h3>Comparables</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Comparable A, outside Decentraland: To The Rescue!</th>
+<th>Comparable B, outside Decentraland: Nintendogs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What we observed works</td>
+<td>Adopters come in wanting specific things, and you match dogs to them. Every dog has its own traits. The look is pastel and friendly. <span class="tag draft">draft</span></td>
+<td>Care is direct: you pet, wash and play with the dog yourself and it reacts at once. Dogs never grow old or die, so it stays gentle. Short visits are enough. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td>What does not fit our audience or context, and why</td>
+<td>It turns into busy shelter management: money, disease, staff and many dogs at once. Reviewers called it hectic and stressful, and a dog can be sent away. That fights "cosy" and "losses never". <span class="tag draft">draft</span></td>
+<td>The dogs are yours forever. Nothing ends, so there is no goodbye and nothing to match. It is a private, solo game built for its own hardware. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td>What we will do differently</td>
+<td>No money, no admin and no loss: one to five pups in a small diorama. A wrong match is not a failed sale; the pup comes back to you. <span class="tag draft">draft</span></td>
+<td>The pups are not yours. You get each one ready and let it go, and you may keep just one. <span class="tag draft">draft</span></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>9. 4 Week Plan (v1 scope)</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Week</th>
+<th>What is playable / done</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Prototype definition</td>
+<td>Needs and traits working on the corgi. Matching with owner profiles tested on paper, then in the build. One new breed built and timed. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td>2. Core interaction + first-group test</td>
+<td>The full loop works alone from end to end: Meet, Care, Lead, Match, pups that come back, the star rating. A basic Park where two players can offer and accept a play-date. Playtest at 2 players, our social threshold. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td>3. Core systems refinement</td>
+<td>Your own dog, the daily wish and "days together". Doggidex stamps that save. Kennel upgrades. Carers you can dress. More breeds. <span class="tag draft">draft</span></td>
+</tr>
+<tr>
+<td>4. Playable prototype, final design direction (mobile playtest)</td>
+<td>Camera buttons and large action buttons. Phone playtest with up to 10 players in the Park. Saved dog friendships. The remaining breeds. Final look locked. <span class="tag draft">draft</span></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What keeps the experience changing after launch.</strong></p>
+<ul>
+<li>Without building a new level, we can change or rotate which breeds arrive and the pool of daily wishes every week. <span class="tag draft">draft</span></li>
+<li>If an update is skipped, random needs, random owner profiles and the daily wish still create variation. <span class="tag draft">draft</span></li>
+<li>N/A: nothing resets, and progression gives no advantage over another player. <span class="tag draft">draft</span></li>
+<li>One player behaviour that would change what we build next: if players keep a dog but never visit the Park, we bring play-dates to the centre's front door. <span class="tag draft">draft</span></li>
+</ul>
+<p><strong>Not building in v1.</strong></p>
+<p>Nothing is held back: the creator plans the whole design for v1, including all twenty or more breeds, carers you can dress and saved dog friendships.</p>
+<p><strong>Top risk + fallback.</strong></p>
+<p>Top risk: the twenty breeds. Nineteen new breeds at about 4 hours each is about 76 of the roughly 180 hours planned across the four build weeks, which makes them the largest single item, and the 4 hours is an untested estimate. <span class="tag open">to be decided: time one breed in week 1 to replace the estimate</span> Fallback: if a breed takes longer, v1 launches with fewer breeds and the rest arrive a few at a time after launch, shown as silhouettes in the doggidex until then. <span class="tag draft">draft</span></p>
+</div></body></html>
